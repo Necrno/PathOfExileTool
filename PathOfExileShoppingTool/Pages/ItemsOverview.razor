@@ -1,0 +1,34 @@
+﻿@inherits ItemsOverviewComponent
+@page "/items"
+
+<div class="d-flex w-100 flex-wrap">
+    @foreach (var item in Items)
+    {
+        <div class="card m-3">
+            <div class="card-header">
+                @item.Title
+            </div>
+            <div class="card-body">
+                <p class="card-text">The cost of this item is approximately : @item.EstimatedCost @item.ItemCost</p>
+                <p class="card-text">The importancy is : @item.Importancy</p>
+                @if (item.Description != null)
+                {
+                    <p class="card-text">Additional notes : @item.Description</p>
+                }
+                <a @onclick="() => DeleteItem(item.ItemId)" class="btn btn-secondary">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Items.Count() != 0)
+{
+    <div class="w-75">
+        <button class="btn btn-primary" @onclick="() => TotalCost()">Count cost</button>
+        <p>Total cost : @CostOfTotalItemsChaos chaos @CostOfTotalItemsExalts exalts @CostOfTotalItemsMirrors mirrors</p>
+    </div>
+} 
+else
+{
+    <h1>Add some item first please.</h1>
+}

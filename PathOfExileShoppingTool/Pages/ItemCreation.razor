@@ -1,0 +1,57 @@
+﻿@inherits ShopListComponent
+@page "/shoplist"
+@using PathOfExileShoppingTool.Modal
+
+
+<div class="m-3">
+    <div class="w-50">
+        <div class="form-group">
+            <label for="ItemName">Item Name</label>
+            <input type="text" class="form-control" id="ItemName" @bind="ItemTitle">
+        </div>
+    </div>
+</div>
+<div class="m-3">
+    <div class="w-50">
+        <div class="form-group">
+            <label for="ItemCost">Item Cost</label>
+            <select @bind="ItemCost" id="ItemCost" class="form-select">
+                @foreach (var itemCost in Enum.GetValues(typeof(ItemCost)))
+                {
+                    <option value="@itemCost">@itemCost</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>
+<div class="m-3">
+    <div class="w-50">
+        <div class="form-group">
+            <label for="EstimatedCost">Estimated Cost</label>
+            <input type="number" class="form-control" id="EstimatedCost" @bind="EstimatedCost" />
+        </div>
+    </div>
+</div>
+<div class="m-3">
+    <div class="w-50">
+        <div class="form-group">
+            <label for="ItemImportancy">Item Importancy</label>
+            <select class="form-select" @bind="Importancy" id="ItemImportancy">
+                @foreach (var itemImportanct in Enum.GetValues(typeof(Importancy)))
+                {
+                    <option value="@itemImportanct">@itemImportanct</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>
+<div class="m-3">
+    <div class="w-50">
+        <label for="Description">Additional notes</label>
+        <textarea class="form-control" rows="5" id="Description" @bind="Description"></textarea>
+    </div>
+</div>
+<button class="btn btn-primary m-3" type="submit" @onclick="() => CreateShoppingItem()">Add item</button>
+
+
+
