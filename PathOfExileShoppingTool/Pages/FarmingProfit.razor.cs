@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using PathOfExileShoppingTool.Helpers;
 using PathOfExileShoppingTool.Modal;
 
 namespace PathOfExileShoppingTool.Pages
@@ -9,6 +10,9 @@ namespace PathOfExileShoppingTool.Pages
     {
         [Inject]
         public ISyncLocalStorageService LocalStorageService { get; set; }
+
+        [Inject]
+        public SaveLocal SaveLocal { get; set; }
 
         public List<ProfitItem> ProfitItems { get; set; } = new List<ProfitItem>();
 
@@ -72,6 +76,7 @@ namespace PathOfExileShoppingTool.Pages
                 }
                 var newArr = JsonSerializer.Serialize(ProfitItems);
                 LocalStorageService.SetItemAsString("ProfitItems", newArr);
+
             }
 
             if (curRowToDelete != null)
@@ -114,24 +119,7 @@ namespace PathOfExileShoppingTool.Pages
                 }
 
                 ProfitItems.Add(profitItem);
-
-                // Get array from localstorage
-                var currentItem = LocalStorageService.GetItemAsString("ProfitItems");
-                if (currentItem != null)
-                {
-                    var currentDeserializedArray = JsonSerializer.Deserialize<List<ProfitItem>>(currentItem);
-                    if (currentDeserializedArray != null)
-                    {
-                        currentDeserializedArray.Add(profitItem);
-                        var serializerArray = JsonSerializer.Serialize(currentDeserializedArray);
-                        LocalStorageService.SetItemAsString("ProfitItems", serializerArray);
-                    }
-                }
-                else
-                {
-                    var newProfitItemsArray = JsonSerializer.Serialize(ProfitItems);
-                    LocalStorageService.SetItemAsString("ProfitItems", newProfitItemsArray);
-                }
+                SaveLocal.SaveLocalArray(ProfitItems, "ProfitItems", LocalStorageService, profitItem);
             }
         }
 
@@ -146,19 +134,7 @@ namespace PathOfExileShoppingTool.Pages
             };
 
             CurrencyRows.Add(currencyRow);
-            var currentCurrencyRows = LocalStorageService.GetItemAsString("CurrencyRows");
-            if (currentCurrencyRows != null)
-            {
-                var desCurArr = JsonSerializer.Deserialize<List<CurrencyRow>>(currentCurrencyRows);
-                desCurArr.Add(currencyRow);
-                var serCurArr = JsonSerializer.Serialize(desCurArr);
-                LocalStorageService.SetItemAsString("CurrencyRows", serCurArr);
-            }
-            else
-            {
-                var newCurArr = JsonSerializer.Serialize(CurrencyRows);
-                LocalStorageService.SetItemAsString("CurrencyRows", newCurArr);
-            }
+            SaveLocal.SaveLocalArray(CurrencyRows, "CurrencyRows", LocalStorageService, currencyRow);
         }
     }
 }
