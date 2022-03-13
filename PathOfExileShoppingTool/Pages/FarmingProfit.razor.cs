@@ -112,6 +112,7 @@ namespace PathOfExileShoppingTool.Pages
             CalculateCost(ProfitItems);
         }
 
+        // Dit veranderen want hij doet nu iedere x alles in de lijst adden kwa prijs.
         protected void CalculateCost(List<ProfitItem> list)
         {
             foreach (var item in list)
