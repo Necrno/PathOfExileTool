@@ -53,6 +53,7 @@ namespace PathOfExileShoppingTool.Pages
                     CurrencyRows = curList;
                 }
             }
+            SetBoughtCurrencyOnLoad();
         }
 
         protected void DeleteTableRow(Guid id)
@@ -135,6 +136,25 @@ namespace PathOfExileShoppingTool.Pages
 
             CurrencyRows.Add(currencyRow);
             SaveLocal.SaveLocalArray(CurrencyRows, "CurrencyRows", LocalStorageService, currencyRow);
+        }
+
+        protected void SetBoughtCurrencyOnLoad()
+        {
+            foreach(var item in ProfitItems)
+            {
+                switch(item.ItemCost)
+                {
+                    case ItemCost.Chaos:
+                        totalPriceChaos += item.ItemPrice * item.ItemQuantity;
+                        break;
+                    case ItemCost.Exatls:
+                        totalPriceExalts += item.ItemPrice * item.ItemQuantity;
+                        break;
+                    case ItemCost.Mirrors:
+                        totalPriceMirros += item.ItemPrice * item.ItemQuantity;
+                        break;
+                }
+            }
         }
     }
 }

@@ -21,14 +21,8 @@
     }
 </div>
 
-@if (Items.Count() != 0)
-{
-    <div class="w-75">
-        <button class="btn btn-primary" @onclick="() => TotalCost()">Count cost</button>
-        <p>Total cost : @CostOfTotalItemsChaos chaos @CostOfTotalItemsExalts exalts @CostOfTotalItemsMirrors mirrors</p>
-    </div>
-} 
-else
+@if (Items.Count() == 0)
 {
     <h1>Add some item first please.</h1>
 }
+
