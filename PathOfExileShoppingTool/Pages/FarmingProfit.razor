@@ -1,0 +1,111 @@
+﻿@inherits ProfitCalculatorComponent
+@page "/farmItems"
+
+<div class="w-75">
+    <div class="row">
+        <label for="BoughtItem">Bought Item</label>
+        <input type="text" class="form-control" id="BoughtItem" @bind="BoughtItemTitle" />
+    </div>
+    <div class="row">
+        <label for="PriceBoughtItem">Price</label>
+        <input type="number" class="form-control" id="PriceBoughtItem" @bind="BoughtItemPrice" />
+    </div>
+    <div class="row">
+        <label for="QuantityBoughtItem">Quantity</label>
+        <input type="number" class="form-control" id="QuantityBoughtItem" @bind="QuantityBoughtItem" />
+    </div>
+    <div class="row">
+        <label for="ItemCost">Currency Type</label>
+        <select @bind="ItemCost" id="ItemCost" class="form-select">
+            @foreach (var item in Enum.GetValues(typeof(ItemCost)))
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+    <div>
+        <button class="btn btn-primary mt-3" @onclick="() => AddToBoughtItems()">Add</button>
+    </div>
+</div>
+
+@if (ProfitItems.Count() != 0)
+{
+    <h2 class="mt-2">Items bought</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Item Name</th>
+                <th scope="col">Item Quantity</th>
+                <th scope="col">Item Price</th>
+                <th scope="col">Item Currency Type</th>
+                <th scope="col">Delete Item</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ProfitItems)
+            {
+                <tr>
+                    <td>@item.ItemTitle</td>
+                    <td>@item.ItemQuantity</td>
+                    <td>@item.ItemPrice</td>
+                    <td>@item.ItemCost</td>
+                    <td><a class="btn btn-secondary" @onclick="() => DeleteTableRow(item.ItemID)">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="bold mt-3">Add some items first to make them appear in a table.</p>
+}
+
+@if (ProfitItems.Count() != 0 || CurrencyRows.Count != 0)
+{
+    <h2 class="mt-5">Currency Made</h2>
+    <div class="w-75">
+        <div class="row">
+            <label for="chaosMade">Chaos</label>
+            <input type="number" class="form-control" id="chaosMade" @bind="madeChaos" />
+        </div>
+        <div class="row">
+            <label for="exaltsMade">Exalts</label>
+            <input type="number" class="form-control" id="exaltsMade" @bind="madeExalts" />
+        </div>
+        <div class="row">
+            <label for="mirrorsMade">Chaos</label>
+            <input type="number" class="form-control" id="mirrorsMade" @bind="madeMirrors" />
+        </div>
+        <button class="btn btn-primary mt-3" @onclick="() => AddMadeCurrency()">Add Made Currency</button>
+    </div>
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col">#</th>
+                <th class="col">Chaos</th>
+                <th class="col">Exalts</th>
+                <th class="col">Mirrors</th>
+                <th class="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Bought Item Cost</th>
+                <td>@totalPriceChaos</td>
+                <td>@totalPriceExalts</td>
+                <td>@totalPriceMirros</td>
+            </tr>
+            @foreach (var curRow in CurrencyRows)
+            {
+                <tr>
+                    <th scope="row">Currency made</th>
+                    <td>@curRow.Chaos</td>
+                    <td>@curRow.Exalts</td>
+                    <td>@curRow.Mirrors</td>
+                    <td><a class="btn btn-secondary" @onclick="() => DeleteTableRow(curRow.RowID)">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
