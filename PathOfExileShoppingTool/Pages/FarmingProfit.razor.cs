@@ -14,14 +14,15 @@ namespace PathOfExileShoppingTool.Pages
 
         public List<CurrencyRow> CurrencyRows { get; set; } = new List<CurrencyRow>();
 
+        protected int totalPriceChaos;
+        protected int totalPriceExalts;
+        protected int totalPriceMirros;
+
+        // Variables below are used for binding.
         protected string BoughtItemTitle;
         protected int BoughtItemPrice;
         protected int QuantityBoughtItem;
         protected ItemCost ItemCost;
-
-        protected int totalPriceChaos;
-        protected int totalPriceExalts;
-        protected int totalPriceMirros;
 
         protected int madeChaos;
         protected int madeExalts;
@@ -31,12 +32,23 @@ namespace PathOfExileShoppingTool.Pages
         {
             var profitItemsArray = LocalStorageService.GetItemAsString("ProfitItems");
             var currencyRowsArray = LocalStorageService.GetItemAsString("CurrencyRows");
-            if (profitItemsArray != null && currencyRowsArray != null)
+
+            if (profitItemsArray != null)
             {
-                ProfitItems = JsonSerializer.Deserialize<List<ProfitItem>>(profitItemsArray);
-                CurrencyRows = JsonSerializer.Deserialize<List<CurrencyRow>>(currencyRowsArray);
+                var profList = JsonSerializer.Deserialize<List<ProfitItem>>(profitItemsArray);
+                if (profList != null)
+                {
+                    ProfitItems = profList;
+                }
             }
-            CalculateCost(ProfitItems);
+            if (currencyRowsArray != null)
+            {
+                var curList = JsonSerializer.Deserialize<List<CurrencyRow>>(currencyRowsArray);
+                if (curList != null)
+                {
+                    CurrencyRows = curList;
+                }
+            }
         }
 
         protected void DeleteTableRow(Guid id)
@@ -50,7 +62,7 @@ namespace PathOfExileShoppingTool.Pages
                 {
                     totalPriceChaos -= itemToDelete.ItemPrice * itemToDelete.ItemQuantity;
                 }
-                else if(itemToDelete.ItemCost == ItemCost.Exatls)
+                else if (itemToDelete.ItemCost == ItemCost.Exatls)
                 {
                     totalPriceExalts -= itemToDelete.ItemPrice * itemToDelete.ItemQuantity;
                 }
@@ -62,13 +74,12 @@ namespace PathOfExileShoppingTool.Pages
                 LocalStorageService.SetItemAsString("ProfitItems", newArr);
             }
 
-            if(curRowToDelete != null)
+            if (curRowToDelete != null)
             {
                 CurrencyRows.Remove(curRowToDelete);
                 var newCurrencyArr = JsonSerializer.Serialize(CurrencyRows);
                 LocalStorageService.SetItemAsString("CurrencyRows", newCurrencyArr);
             }
-            CalculateCost(ProfitItems);
         }
 
         protected void AddToBoughtItems()
@@ -87,6 +98,19 @@ namespace PathOfExileShoppingTool.Pages
                 if (profitItem.ItemQuantity == 0)
                 {
                     profitItem.ItemPrice = 1;
+                }
+
+                if (profitItem.ItemCost == ItemCost.Chaos)
+                {
+                    totalPriceChaos += profitItem.ItemPrice * profitItem.ItemQuantity;
+                }
+                else if (profitItem.ItemCost == ItemCost.Exatls)
+                {
+                    totalPriceExalts += profitItem.ItemPrice * profitItem.ItemQuantity;
+                }
+                else
+                {
+                    totalPriceMirros += profitItem.ItemPrice * profitItem.ItemQuantity;
                 }
 
                 ProfitItems.Add(profitItem);
@@ -109,27 +133,6 @@ namespace PathOfExileShoppingTool.Pages
                     LocalStorageService.SetItemAsString("ProfitItems", newProfitItemsArray);
                 }
             }
-            CalculateCost(ProfitItems);
-        }
-
-        // Dit veranderen want hij doet nu iedere x alles in de lijst adden kwa prijs.
-        protected void CalculateCost(List<ProfitItem> list)
-        {
-            foreach (var item in list)
-            {
-                switch (item.ItemCost)
-                {
-                    case ItemCost.Chaos:
-                        totalPriceChaos += item.ItemPrice * item.ItemQuantity;
-                        break;
-                    case ItemCost.Exatls:
-                        totalPriceExalts += item.ItemPrice * item.ItemQuantity;
-                        break;
-                    case ItemCost.Mirrors:
-                        totalPriceMirros += item.ItemPrice * item.ItemQuantity;
-                        break;
-                }
-            }
         }
 
         protected void AddMadeCurrency()
@@ -144,7 +147,7 @@ namespace PathOfExileShoppingTool.Pages
 
             CurrencyRows.Add(currencyRow);
             var currentCurrencyRows = LocalStorageService.GetItemAsString("CurrencyRows");
-            if(currentCurrencyRows != null)
+            if (currentCurrencyRows != null)
             {
                 var desCurArr = JsonSerializer.Deserialize<List<CurrencyRow>>(currentCurrencyRows);
                 desCurArr.Add(currencyRow);
