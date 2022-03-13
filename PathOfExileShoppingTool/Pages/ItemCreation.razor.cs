@@ -1,8 +1,6 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using PathOfExileShoppingTool.Helpers;
 using PathOfExileShoppingTool.Modal;
 
 namespace PathOfExileShoppingTool.Pages
@@ -11,6 +9,9 @@ namespace PathOfExileShoppingTool.Pages
     {
         [Inject]
         public ISyncLocalStorageService LocalStorageService { get; set; }
+
+        [Inject]
+        public SaveLocal SaveLocal { get; set; }
 
         public List<ShopListItem> Items { get; set; } = new List<ShopListItem>();
 
@@ -38,28 +39,9 @@ namespace PathOfExileShoppingTool.Pages
 
         private void SaveItemArray(ShopListItem shopItem)
         {
-            var options = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true
-            };
-
-
             if (shopItem != null)
             {
-                var currArr = LocalStorageService.GetItemAsString("Items");
-                if(currArr != null)
-                {
-                    var des = JsonSerializer.Deserialize<List<ShopListItem>>(currArr);
-                    des.Add(shopItem);
-                    var serializedArr = JsonSerializer.Serialize(des, options);
-                    LocalStorageService.SetItemAsString("Items", serializedArr);
-                }
-                else
-                {                   
-                    var serialzedItem = JsonSerializer.Serialize(Items);
-                    LocalStorageService.SetItemAsString("Items", serialzedItem);
-                }
+                SaveLocal.SaveLocalArray(Items, "Items", LocalStorageService, shopItem);
             }
         }
     }
