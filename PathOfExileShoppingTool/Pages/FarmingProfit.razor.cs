@@ -3,6 +3,8 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using PathOfExileShoppingTool.Helpers;
 using PathOfExileShoppingTool.Modal;
+using ChartJs.Blazor.BarChart;
+using ChartJs.Blazor.Common;
 
 namespace PathOfExileShoppingTool.Pages
 {
@@ -17,6 +19,9 @@ namespace PathOfExileShoppingTool.Pages
         public List<ProfitItem> ProfitItems { get; set; } = new List<ProfitItem>();
 
         public List<CurrencyRow> CurrencyRows { get; set; } = new List<CurrencyRow>();
+
+        // For ChartJS
+        protected BarConfig _config;
 
         protected int totalPriceChaos;
         protected int totalPriceExalts;
@@ -34,6 +39,7 @@ namespace PathOfExileShoppingTool.Pages
 
         protected override void OnInitialized()
         {
+            ConfigureBarOptions();
             var profitItemsArray = LocalStorageService.GetItemAsString("ProfitItems");
             var currencyRowsArray = LocalStorageService.GetItemAsString("CurrencyRows");
 
@@ -155,6 +161,22 @@ namespace PathOfExileShoppingTool.Pages
                         break;
                 }
             }
+        }
+
+        private void ConfigureBarOptions()
+        {
+            _config = new BarConfig
+            {
+                Options = new BarOptions
+                {
+                    Responsive = true,
+                    Title = new OptionsTitle
+                    {
+                        Display = true,
+                        Text = "Test123"
+                    }
+                }
+            };
         }
     }
 }

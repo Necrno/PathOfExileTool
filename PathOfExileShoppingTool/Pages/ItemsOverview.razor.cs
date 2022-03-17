@@ -21,15 +21,14 @@ namespace PathOfExileShoppingTool.Pages
 
         protected override void OnInitialized()
         {
-            FillStuff();
-        }
-
-        private void FillStuff()
-        {
             var items = LocalStorageService.GetItemAsString("Items");
             if (items != null)
             {
-                Items = JsonSerializer.Deserialize<List<ShopListItem>>(items);
+                var x = JsonSerializer.Deserialize<List<ShopListItem>>(items);
+                if (x != null)
+                {
+                    Items = x;
+                }
             }
         }
 

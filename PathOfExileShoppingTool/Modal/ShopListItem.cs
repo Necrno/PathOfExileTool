@@ -6,6 +6,7 @@
         public string Title { get; set; }
         public string Description { get; set; }
         public int EstimatedCost { get; set; }
+        public Uri TradeLink { get; set; }
         public ItemCost ItemCost { get; set; }
         public Importancy Importancy { get; set; }
     }

@@ -11,6 +11,11 @@
             <div class="card-body">
                 <p class="card-text">The cost of this item is approximately : @item.EstimatedCost @item.ItemCost</p>
                 <p class="card-text">The importancy is : @item.Importancy</p>
+                @if(item.TradeLink != null)
+                {
+                    <a class="card-text mb-3" href="@item.TradeLink">Trade link : @item.Title</a>
+                }
+                <br />
                 @if (item.Description != null)
                 {
                     <p class="card-text">Additional notes : @item.Description</p>

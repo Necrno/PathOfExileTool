@@ -20,6 +20,7 @@ namespace PathOfExileShoppingTool.Pages
         protected int EstimatedCost;
         protected Importancy Importancy;
         protected string Description;
+        protected string TradeUrl;
         
 
         protected void CreateShoppingItem()
@@ -31,6 +32,7 @@ namespace PathOfExileShoppingTool.Pages
                 EstimatedCost = EstimatedCost,
                 Importancy = Importancy,
                 Description = Description,
+                TradeLink = new Uri(TradeUrl),
                 ItemId = Guid.NewGuid()
             };
             Items.Add(shopItem);

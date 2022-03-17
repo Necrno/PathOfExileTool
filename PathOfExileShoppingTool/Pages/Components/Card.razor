@@ -1,0 +1,13 @@
+﻿@inherits CardComponent
+
+<div class="card w-25">
+    <h5 class="card-header">@MainTitle</h5>
+    <div class="card-body">
+        @if(ParagraphTitle != string.Empty)
+        {
+            <h5 class="card-title">@ParagraphTitle</h5>
+        }
+        <p class="card-text">@CardText</p>
+        <a href="@PageUrl" class="btn btn-secondary">@PageTitle</a>
+    </div>
+</div>
